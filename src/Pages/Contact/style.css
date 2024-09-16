@@ -1,0 +1,22 @@
+.logo i{
+    font-size: larger;
+    border-radius: 50%;
+    padding-top: 10px;
+    color: white;
+}
+.contact h5{
+    margin: 20px 0!important;
+    font-weight: lighter;
+}
+.contact input{
+    background-color: #F5F5F5!important;
+}
+textarea{
+    background-color: #F5F5F5!important;
+    margin: 50px 0!important;
+}
+.contact button{
+    background-color: #DB4444!important;
+    color: white;
+    padding: 20px 30px;
+}

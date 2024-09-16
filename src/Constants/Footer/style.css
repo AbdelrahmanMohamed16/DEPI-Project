@@ -1,0 +1,16 @@
+footer{
+    color: white!important;
+}
+footer input::placeholder{
+    color:white!important;
+}
+footer h5{
+    margin:30px 0!important;
+}
+footer i{
+    position: absolute;
+    bottom:19px;
+    right:20px;
+    cursor: pointer;
+    font-size:20px;
+}
