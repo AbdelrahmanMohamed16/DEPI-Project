@@ -1,19 +1,6 @@
-// import React from "react";
-// import "./App.css";
-// import { Routes, Route } from "react-router-dom";
-// import ViewTasks from "./pages/ViewTasks";
-//
-// function App() {
-//   return (
-//     <>
-//       <Routes>
-//         <Route path="/views" element={<ViewTasks />} />
-//       </Routes>
-//     </>
-//   );
-// }
-//
-// export default App;
+
+import "./App.css";
+import ViewTasks from "./pages/ViewTasks";
 import React, { useEffect, useState } from 'react';
 import { SignUp } from './pages/SignUp';
 import { Route, Routes } from "react-router-dom";
@@ -52,6 +39,7 @@ const App: React.FC = () => {
             <Routes>
                 <Route path="signUp" element={<SignUp />} />
                 <Route path="login" element={<Login saveUserData={saveUserData} />} />
+                <Route path="/views" element={<ViewTasks />} />
             </Routes>
         </div>
     );

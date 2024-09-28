@@ -54,7 +54,7 @@ export function Login({ saveUserData }: LoginProps) {
             localStorage.setItem('Token', res.data.jwt);
             saveUserData();
             setErrorMessage(""); // Clear previous error messages
-            navigate('/');
+            navigate('/views');
         } catch (err: any) { // Use 'any' type for the error
             setErrorMessage(err.response?.data || "An error occurred");
         }

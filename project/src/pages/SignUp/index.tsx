@@ -1,6 +1,6 @@
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import './style.css';
+
 import { useState } from "react";
 import axios from "axios";
 import Joi from "joi"; // Use the regular Joi library
