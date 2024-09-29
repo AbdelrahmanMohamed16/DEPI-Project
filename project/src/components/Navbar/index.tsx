@@ -11,7 +11,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
-  borderRadius: 18,
+  borderRadius: 10,
   backgroundColor: "transparent",
   border: "1px solid #A8ABBD",
   marginRight: theme.spacing(2),
@@ -62,7 +62,7 @@ export default function Navbar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
-        sx={{ boxShadow: "none", background: "#FFFFFF" }}
+        sx={{ boxShadow: "none", background: "transparent" }}
       >
         <Toolbar>
           <Search>

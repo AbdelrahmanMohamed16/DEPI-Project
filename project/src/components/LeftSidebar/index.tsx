@@ -11,10 +11,10 @@ import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import React from "react";
 
-export default function Sidebar() {
+export default function LeftSidebar() {
   return (
     <Grid2
-      size={3}
+      size={2}
       position={"fixed"}
       top={0}
       bottom={0}
