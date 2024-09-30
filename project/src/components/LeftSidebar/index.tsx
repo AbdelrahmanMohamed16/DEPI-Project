@@ -10,7 +10,7 @@ import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import React from "react";
-
+import { Link } from "react-router-dom";
 export default function LeftSidebar() {
   return (
     <Grid2
@@ -30,10 +30,7 @@ export default function LeftSidebar() {
           <Typography variant="h5" sx={{ color: "#101C56", fontWeight: "600" }}>
             My Space
           </Typography>
-          <Typography
-            variant="subtitle1"
-            sx={{ color: "#666666", fontWeight: "bold" }}
-          >
+          <Typography variant="subtitle1" sx={{ color: "#666666" }}>
             Workspace Title
           </Typography>
         </Box>
@@ -52,7 +49,12 @@ export default function LeftSidebar() {
               textTransform: "capitalize",
             }}
           >
-            Overview
+            <Link
+              to={"overview"}
+              style={{ textDecoration: "none", color: "#3754DB" }}
+            >
+              Overview
+            </Link>
           </Button>
           <Button
             variant="text"
@@ -65,7 +67,12 @@ export default function LeftSidebar() {
               textTransform: "capitalize",
             }}
           >
-            Tasks
+            <Link
+              to={"tasks"}
+              style={{ textDecoration: "none", color: "#3754DB" }}
+            >
+              Tasks
+            </Link>
           </Button>
           <Button
             variant="text"
@@ -81,7 +88,12 @@ export default function LeftSidebar() {
               textTransform: "capitalize",
             }}
           >
-            Settings
+            <Link
+              to={"settings"}
+              style={{ textDecoration: "none", color: "#3754DB" }}
+            >
+              Settings
+            </Link>
           </Button>
         </Stack>
       </Container>

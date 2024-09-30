@@ -36,7 +36,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-export default function Right() {
+export default function RightSidebar({ userData }: any) {
   return (
     <Grid2
       size={2}
@@ -57,16 +57,16 @@ export default function Right() {
             sx={{ width: "90px", marginBottom: "9px" }}
           >
             <Avatar
-              alt="Abdelrahman "
+              alt={userData?.name ? userData.name : "User Name"}
               src="/static/images/avatar/1.jpg"
               sx={{ borderRadius: "10px", width: "100%", height: "90px" }}
             />
           </StyledBadge>
           <Typography variant="h6" color="#101C56">
-            User Name
+            {userData?.name ? userData.name : "User Name"}
           </Typography>
           <Typography variant="body2" color="#666666">
-            Useremail@gmail.com
+            {userData?.email ? userData.email : "Useremail@gmail.com"}
           </Typography>
           <Button
             variant="contained"
