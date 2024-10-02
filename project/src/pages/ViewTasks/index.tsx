@@ -47,7 +47,7 @@ export default function ViewTasks() {
               sx={{
                 borderBottom: 1,
                 borderColor: "divider",
-                width: "fit-content",
+                width: "100%",
               }}
             >
               <TabList
@@ -55,27 +55,35 @@ export default function ViewTasks() {
                 aria-label="lab API tabs example"
               >
                 <Tab
-                  label="Item One"
+                  label="All Tasks"
                   value="1"
                   icon={
                     <Badge
-                      badgeContent={100}
+                      badgeContent={9}
+                      color="primary"
                       anchorOrigin={{
                         vertical: "top",
                         horizontal: "right",
                       }}
-                      sx={{ paddingX: "10px", background: "#F0F0F0" }}
-                    ></Badge>
+                      sx={{
+                        paddingX: "10px",
+                      }}
+                    />
                   }
                   iconPosition="end"
-                  sx={{ paddingLeft: "2px", paddingRight: "20px" }}
+                  sx={{
+                    paddingLeft: "2px",
+                    paddingRight: "20px",
+                    fontSize: 15,
+                    textTransform: "capitalize",
+                  }}
                 />
                 <Tab
-                  label="Item Two"
+                  label="Pending"
                   value="2"
                   icon={
                     <Badge
-                      badgeContent={9}
+                      badgeContent={3}
                       anchorOrigin={{
                         vertical: "top",
                         horizontal: "right",
@@ -84,14 +92,40 @@ export default function ViewTasks() {
                     ></Badge>
                   }
                   iconPosition="end"
-                  sx={{ paddingLeft: "2px", paddingRight: "20px" }}
+                  sx={{
+                    paddingLeft: "2px",
+                    paddingRight: "20px",
+                    fontSize: 15,
+                    textTransform: "capitalize",
+                  }}
                 />
                 <Tab
-                  label="Item Three"
+                  label="In Progress"
                   value="3"
                   icon={
                     <Badge
-                      badgeContent={100}
+                      badgeContent={3}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      sx={{ paddingX: "10px", backgroundColor: "#F6F8FD" }}
+                    ></Badge>
+                  }
+                  iconPosition="end"
+                  sx={{
+                    paddingLeft: "2px",
+                    paddingRight: "20px",
+                    fontSize: 15,
+                    textTransform: "capitalize",
+                  }}
+                />
+                <Tab
+                  label="Completed"
+                  value="4"
+                  icon={
+                    <Badge
+                      badgeContent={3}
                       anchorOrigin={{
                         vertical: "top",
                         horizontal: "right",
@@ -100,13 +134,18 @@ export default function ViewTasks() {
                     ></Badge>
                   }
                   iconPosition="end"
-                  sx={{ paddingLeft: "2px" }}
+                  sx={{
+                    paddingLeft: "2px",
+                    fontSize: 15,
+                    textTransform: "capitalize",
+                  }}
                 />
               </TabList>
             </Box>
             <TabPanel value="1">Item One</TabPanel>
             <TabPanel value="2">Item Two</TabPanel>
             <TabPanel value="3">Item Three</TabPanel>
+            <TabPanel value="4">Item Four</TabPanel>
           </TabContext>
         </Box>
       </Grid2>

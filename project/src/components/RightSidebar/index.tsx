@@ -39,12 +39,13 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 export default function RightSidebar({ userData }: any) {
   return (
     <Grid2
-      size={2}
+      size={{ sm: 3, md: 2 }}
       offset={0.2}
-      mt={2}
+      my={2}
+      pb={2}
       sx={{
         background: "#FFFFFF",
-        display: { xs: "none", sm: "flex" },
+        display: { xs: "none", md: "flex" },
         borderRadius: "24px",
       }}
     >
@@ -82,7 +83,7 @@ export default function RightSidebar({ userData }: any) {
             My Profile
           </Button>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateCalendar sx={{ background: "#F6F8FD" }} />
+            <DateCalendar sx={{ background: "#F6F8FD", width: "100%" }} />
           </LocalizationProvider>
         </Stack>
       </Container>
