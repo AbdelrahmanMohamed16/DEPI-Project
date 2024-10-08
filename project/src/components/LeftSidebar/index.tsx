@@ -34,8 +34,7 @@ export default function LeftSidebar() {
             text: "Overview",
             icon: (
               <GridViewOutlinedIcon
-                sx={{ color: "#3754DB" }}
-                fontSize="large"
+                sx={{ color: "#3754DB", fontSize: "40px" }}
               />
             ),
           },
@@ -101,8 +100,7 @@ export default function LeftSidebar() {
             variant="text"
             startIcon={
               <GridViewOutlinedIcon
-                sx={{ color: "#3754DB" }}
-                fontSize="large"
+                sx={{ color: "#3754DB", fontSize: "40px" }}
               />
             }
             sx={{
@@ -121,7 +119,7 @@ export default function LeftSidebar() {
           <Button
             variant="text"
             startIcon={
-              <TextSnippetIcon sx={{ color: "#3754DB" }} fontSize="large" />
+              <TextSnippetIcon sx={{ color: "#3754DB", fontSize: "40px" }} />
             }
             sx={{
               color: "#666666",
@@ -140,8 +138,7 @@ export default function LeftSidebar() {
             variant="text"
             startIcon={
               <SettingsOutlinedIcon
-                sx={{ color: "#3754DB" }}
-                fontSize="large"
+                sx={{ color: "#3754DB", fontSize: "40px" }}
               />
             }
             sx={{
