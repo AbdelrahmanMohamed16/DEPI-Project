@@ -20,6 +20,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
 import { Link } from "react-router-dom";
+import { Padding } from "@mui/icons-material";
 export default function LeftSidebar() {
   const [open, setOpen] = React.useState(false);
 
@@ -76,7 +77,7 @@ export default function LeftSidebar() {
   );
   return (
     <Grid2
-      size={{ xs: 1, md: 2 }}
+      size={{ xs: 1.1, md: 2 }}
       position={"fixed"}
       top={0}
       bottom={0}
@@ -156,15 +157,15 @@ export default function LeftSidebar() {
           </Button>
         </Stack>
       </Container>
-      <Container sx={{ display: { xs: "block", md: "none" } }}>
-        <Box mt={4.5}>
+      <Container sx={{ display: { xs: "block", md: "none" }, padding: "0" }}>
+        <Stack mt={4.5}>
           <IconButton onClick={toggleDrawer(true)}>
             <MenuIcon />
           </IconButton>
           <Drawer open={open} onClose={toggleDrawer(false)}>
             {DrawerList}
           </Drawer>
-        </Box>
+        </Stack>
       </Container>
     </Grid2>
   );
