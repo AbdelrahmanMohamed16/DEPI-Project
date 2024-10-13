@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-
+import "./viewTasks.css";
 export default function ViewTasks() {
   const [value, setValue] = useState("1");
 
@@ -57,10 +57,11 @@ export default function ViewTasks() {
                 <Tab
                   label="All Tasks"
                   value="1"
+                  className="Tab"
                   icon={
                     <Badge
                       badgeContent={9}
-                      color="primary"
+                      // color="primary"
                       anchorOrigin={{
                         vertical: "top",
                         horizontal: "right",
@@ -81,6 +82,7 @@ export default function ViewTasks() {
                 <Tab
                   label="Pending"
                   value="2"
+                  className="Tab"
                   icon={
                     <Badge
                       badgeContent={3}
@@ -102,6 +104,7 @@ export default function ViewTasks() {
                 <Tab
                   label="In Progress"
                   value="3"
+                  className="Tab"
                   icon={
                     <Badge
                       badgeContent={3}
@@ -123,6 +126,7 @@ export default function ViewTasks() {
                 <Tab
                   label="Completed"
                   value="4"
+                  className="Tab"
                   icon={
                     <Badge
                       badgeContent={3}

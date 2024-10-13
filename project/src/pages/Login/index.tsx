@@ -17,11 +17,7 @@ interface FormData {
   password: string;
 }
 
-interface LoginProps {
-  saveUserData: () => void;
-}
-
-export function Login({ saveUserData }: LoginProps) {
+export function Login() {
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -65,14 +61,15 @@ export function Login({ saveUserData }: LoginProps) {
         "http://localhost:9000/api/auth/login",
         formData
       );
-      localStorage.setItem("Token", res.data.jwt);
-      setToken(res.data.jwt);
-      saveUserData();
-      setErrorMessage(""); // Clear previous error messages
-      navigate("/views");
+      localStorage.setItem("Token", res.data.token);
+      setToken(res.data.token);
+      setErrorMessage("");
+      console.log(res); // Clear previous error messages
+      navigate("/");
     } catch (err: any) {
+      console.log(err);
       // Use 'any' type for the error
-      setErrorMessage(err.response?.data || "An error occurred");
+      setErrorMessage(err.response?.data.error || "An error occurred");
     }
   };
 
