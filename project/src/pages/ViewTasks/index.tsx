@@ -4,6 +4,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import Modal from './../../components/Modal/index';
 
 export default function ViewTasks() {
   const [value, setValue] = useState("1");
@@ -29,7 +30,7 @@ export default function ViewTasks() {
               Your Tasks in your Space
             </Typography>
           </Stack>
-          <Button
+          {/* <Button
             variant="contained"
             sx={{
               background: "#3754DB",
@@ -39,7 +40,8 @@ export default function ViewTasks() {
             }}
           >
             Create Task
-          </Button>
+          </Button> */}
+          <Modal/>
         </Stack>
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
