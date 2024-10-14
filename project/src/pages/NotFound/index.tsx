@@ -46,8 +46,7 @@ export function NotFound(){
                            component={RouterLink}
                            to="/Overview"
                            variant="contained"
-                           sx={{ mt: "20px" }}
-                       >
+                           sx={{ mt: "20px" }}>
                            Overview
                        </Button>
                    </Grid>

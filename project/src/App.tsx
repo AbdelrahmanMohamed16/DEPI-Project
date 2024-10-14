@@ -50,7 +50,7 @@ const App: React.FC = () => {
     <>
 
       {true ? (
-        <Grid2 container sx={{ width: "100%", background: "#F6F8FD" }}>
+        <Grid2 container  sx={{ width: "100%", background: "#F6F8FD" }}>
           <LeftSidebar />
           <Grid2 size={{ xs: 11, md: 7.6 }} offset={{ xs: 1, md: 2.2 }} mt={3}>
             <Navbar />
