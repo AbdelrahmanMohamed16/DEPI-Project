@@ -41,19 +41,20 @@ interface UserProviderProps {
 export const UserContextProvider: React.FC<UserProviderProps> = ({
   children,
 }) => {
-  const [userData, setUserData] = useState<any>(null);
   const { token } = useAuthContext();
+  const [userData, setUserData] = useState<any>(token ? "loading" : null);
 
   useEffect(() => {
     const fetchUserData = async () => {
+      setUserData("Loading");
       try {
-        const { id } = await jwtDecode<any>(token); // Decode the token and get the ID
+        const { id } = jwtDecode<any>(token); // Decode the token and get the ID
         const response = await axios.get(
           `http://localhost:9000/api/user?id=${id}`
         );
-        const { username, email } = response.data; // Destructure the response data
+        const { username, email, avatar } = response.data; // Destructure the response data
 
-        setUserData({ id, username, email }); // Set the user data in state
+        setUserData({ id, username, email, avatar }); // Set the user data in state
       } catch (error) {
         console.error("Error fetching user data:", error);
         setUserData(null); // Reset user data if there is an error

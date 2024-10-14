@@ -11,6 +11,7 @@ import { useState } from "react";
 import Joi from "joi";
 import axios from "axios";
 import { useAuthContext } from "../Store/AuthContext";
+import { useUserContext } from "../Store/UserContext";
 
 interface FormData {
   email: string;
@@ -23,6 +24,7 @@ export function Login() {
     password: "",
   });
   const { setToken } = useAuthContext();
+  const { setUserData } = useUserContext();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [errors, setErrors] = useState<Joi.ValidationErrorItem[]>([]);
   let navigate = useNavigate();
@@ -63,6 +65,8 @@ export function Login() {
       );
       localStorage.setItem("Token", res.data.token);
       setToken(res.data.token);
+      const { id, username, email, avatar } = res.data;
+      setUserData(id, username, email, avatar);
       setErrorMessage("");
       console.log(res); // Clear previous error messages
       navigate("/");

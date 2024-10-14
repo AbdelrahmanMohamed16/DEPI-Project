@@ -6,6 +6,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import React from "react";
 import { Button, Container, Grid2, Stack, Typography } from "@mui/material";
+import avatar from "../../assets/1.png";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -51,23 +52,21 @@ export default function RightSidebar({ userData }: any) {
     >
       <Container sx={{ display: "flex", justifyContent: "center" }}>
         <Stack sx={{ alignItems: "center", width: "100%" }} mt={12}>
-          <StyledBadge
-            overlap="rectangular"
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            variant="dot"
-            sx={{ width: "90px", marginBottom: "9px" }}
-          >
-            <Avatar
-              alt={userData?.name ? userData.name : "User Name"}
-              src="/static/images/avatar/1.jpg"
-              sx={{ borderRadius: "10px", width: "100%", height: "90px" }}
-            />
-          </StyledBadge>
+          <Avatar
+            alt={userData?.username || "User Name"}
+            src={userData?.avatar || avatar}
+            sx={{
+              borderRadius: "10px",
+              width: "90px",
+              marginBottom: "9px",
+              height: "90px",
+            }}
+          />
           <Typography variant="h6" color="#101C56">
-            {userData?.name ? userData.name : "User Name"}
+            {userData?.username || "User Name"}
           </Typography>
           <Typography variant="body2" color="#666666">
-            {userData?.email ? userData.email : "Useremail@gmail.com"}
+            {userData?.email || "Useremail@gmail.com"}
           </Typography>
           <Button
             variant="contained"

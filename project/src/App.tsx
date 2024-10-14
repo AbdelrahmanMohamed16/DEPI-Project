@@ -11,10 +11,15 @@ import ViewTasks from "./pages/ViewTasks";
 
 const App: React.FC = () => {
   const { userData } = useUserContext();
-
   function ProtectedRoute({ children }: any) {
     console.log(userData);
-    return userData ? children : <Navigate to={"/login"} />;
+    return userData ? (
+      children
+    ) : userData === "loading" ? (
+      <p>Loading....</p>
+    ) : (
+      <Navigate to={"/login"} />
+    );
   }
 
   return (
