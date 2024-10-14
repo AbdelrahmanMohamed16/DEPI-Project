@@ -14,6 +14,7 @@ import { Grid2 } from "@mui/material";
 import LeftSidebar from "./components/LeftSidebar";
 import Navbar from "./components/Navbar";
 import RightSidebar from "./components/RightSidebar";
+import {NotFound} from "./pages/NotFound";
 
 interface UserData extends JwtPayload {
   // Add any properties expected in your JWT payload
@@ -47,10 +48,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Routes>
-        <Route path="signUp" element={<SignUp />} />
-        <Route path="login" element={<Login saveUserData={saveUserData} />} />
-      </Routes>
+
       {true ? (
         <Grid2 container sx={{ width: "100%", background: "#F6F8FD" }}>
           <LeftSidebar />
@@ -67,6 +65,27 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route path='*' element={<ProtectedRoute>
+                <UserContextProvider>
+                  <NotFound />
+                </UserContextProvider>
+              </ProtectedRoute>} />
+
+
+              <Route path="signUp" element={
+                <ProtectedRoute>
+                  <UserContextProvider>
+                    <SignUp />
+                  </UserContextProvider>
+                </ProtectedRoute>
+              } />
+              <Route path="login" element={
+                <ProtectedRoute>
+                  <UserContextProvider>
+                    <Login saveUserData={saveUserData}/>
+                  </UserContextProvider>
+                </ProtectedRoute>
+                } />
               <Route
                 path="overview"
                 element={
