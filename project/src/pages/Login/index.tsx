@@ -11,22 +11,20 @@ import { useState } from "react";
 import Joi from "joi";
 import axios from "axios";
 import { useAuthContext } from "../Store/AuthContext";
+import { useUserContext } from "../Store/UserContext";
 
 interface FormData {
   email: string;
   password: string;
 }
 
-interface LoginProps {
-  saveUserData: () => void;
-}
-
-export function Login({ saveUserData }: LoginProps) {
+export function Login() {
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
   });
   const { setToken } = useAuthContext();
+  const { setUserData } = useUserContext();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [errors, setErrors] = useState<Joi.ValidationErrorItem[]>([]);
   let navigate = useNavigate();
@@ -65,14 +63,17 @@ export function Login({ saveUserData }: LoginProps) {
         "http://localhost:9000/api/auth/login",
         formData
       );
-      localStorage.setItem("Token", res.data.jwt);
-      setToken(res.data.jwt);
-      saveUserData();
-      setErrorMessage(""); // Clear previous error messages
-      navigate("/views");
+      localStorage.setItem("Token", res.data.token);
+      setToken(res.data.token);
+      const { id, username, email, avatar } = res.data;
+      setUserData(id, username, email, avatar);
+      setErrorMessage("");
+      console.log(res); // Clear previous error messages
+      navigate("/");
     } catch (err: any) {
+      console.log(err);
       // Use 'any' type for the error
-      setErrorMessage(err.response?.data || "An error occurred");
+      setErrorMessage(err.response?.data.error || "An error occurred");
     }
   };
 

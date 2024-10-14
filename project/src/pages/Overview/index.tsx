@@ -1,12 +1,13 @@
-import { Box, Button, Grid2, Stack, Typography } from "@mui/material";
-import React from "react";
+import { Grid2, Stack, Typography } from "@mui/material";
+import React, { useEffect } from "react";
 import { useUserContext } from "../Store/UserContext";
 import WavingHandIcon from "@mui/icons-material/WavingHand";
 import cover from "../../assets/kobu.jpeg";
-import { Gradient } from "@mui/icons-material";
 
 export default function Overview() {
   const { userData } = useUserContext();
+  console.log("userData", userData);
+  if (!userData) return <p>Loading user data...</p>;
   return (
     <Grid2 container mt={3} mx={3}>
       <Grid2 sx={{ width: "100%" }}>
@@ -28,7 +29,7 @@ export default function Overview() {
                 fontWeight={"bold"}
                 color="#101C56"
               >
-                Hi {userData.name}
+                Hi {userData.username}
               </Typography>
               <Typography variant="body1" color="#666666">
                 Wecome to Semicolon Task Management
