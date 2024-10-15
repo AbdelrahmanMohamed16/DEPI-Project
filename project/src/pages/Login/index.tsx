@@ -65,8 +65,8 @@ export function Login() {
       );
       localStorage.setItem("Token", res.data.token);
       setToken(res.data.token);
-      const { id, username, email, avatar } = res.data;
-      setUserData(id, username, email, avatar);
+      const { id, username, email, avatar, currentWorkspace } = res.data;
+      setUserData(id, username, email, avatar, currentWorkspace);
       setErrorMessage("");
       console.log(res); // Clear previous error messages
       navigate("/");
