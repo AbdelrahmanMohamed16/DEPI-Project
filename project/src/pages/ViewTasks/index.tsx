@@ -88,8 +88,8 @@ export default function ViewTasks() {
               >
                 <Tab
                   label="All Tasks"
-                  value="1"
                   className="Tab"
+                  value="1"
                   icon={
                     <Badge
                       badgeContent={tasks.length}
