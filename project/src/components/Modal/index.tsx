@@ -30,6 +30,7 @@ export default function Modal() {
   const openModal = () => {
     setOpen(true);
   }
+
   const closeModal = () => {
     setOpen(false);
   }
@@ -65,8 +66,7 @@ export default function Modal() {
     });
 
     const { error } = schema.validate(formValues, { abortEarly: false });
-    
-    
+
     const newErrors: { title: string; status: string; description: string } = {
       title: '',
       status: '',
@@ -75,13 +75,13 @@ export default function Modal() {
 
     if (error) {
       error.details.forEach((detail) => {
-        const key = detail.path[0] as keyof typeof newErrors; // Cast to keyof
+        const key = detail.path[0] as keyof typeof newErrors;
         newErrors[key] = detail.message;
       });
     }
 
     setErrors(newErrors);
-    return !error; // returns true if no error
+    return !error; 
   }
 
   const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -103,9 +103,18 @@ export default function Modal() {
     const isValid = validateForm();
     if (isValid) {
       
-      console.log(`Title: ${formValues.title}, Status: ${formValues.status}, Description: ${formValues.description}`);
+      const newTask = {
+        title: formValues.title,
+        status: formValues.status,
+        description: formValues.description,
+      };
       
+      const existingTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
       
+      existingTasks.push(newTask);
+      
+      localStorage.setItem('tasks', JSON.stringify(existingTasks));
+
       setFormValues({ title: '', status: '', description: '' });
       setErrors({ title: '', status: '', description: '' });
       closeModal();  
@@ -180,9 +189,10 @@ export default function Modal() {
         </DialogContent>
         <DialogActions>
           <Button variant='contained' onClick={closeModal} color='error'>Cancel</Button>
-          <Button variant='contained' onClick={handleSubmit} color='success'>Add</Button>
+          <Button variant='contained' onClick={handleSubmit} color='info'>Add</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
   )
 }
+
