@@ -12,7 +12,7 @@ export default function ViewTasks() {
   const [value, setValue] = useState("1");
   const [tasks, setTasks] = useState<
     { title: string; status: string; description: string }[]
-  >([]);
+  >(JSON.parse(localStorage.getItem("tasks") || "[]") || []);
 
   useEffect(() => {
     const storedTasks = localStorage.getItem("tasks");
@@ -89,10 +89,10 @@ export default function ViewTasks() {
                 <Tab
                   label="All Tasks"
                   value="1"
+                  className="Tab"
                   icon={
                     <Badge
                       badgeContent={tasks.length}
-                      color="primary"
                       anchorOrigin={{
                         vertical: "top",
                         horizontal: "right",
@@ -113,6 +113,7 @@ export default function ViewTasks() {
                 <Tab
                   label="Pending"
                   value="2"
+                  className="Tab"
                   icon={
                     <Badge
                       badgeContent={
@@ -136,6 +137,7 @@ export default function ViewTasks() {
                 <Tab
                   label="In Progress"
                   value="3"
+                  className="Tab"
                   icon={
                     <Badge
                       badgeContent={
@@ -160,6 +162,7 @@ export default function ViewTasks() {
                 <Tab
                   label="Completed"
                   value="4"
+                  className="Tab"
                   icon={
                     <Badge
                       badgeContent={
