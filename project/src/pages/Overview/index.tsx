@@ -32,7 +32,7 @@ export default function Overview() {
                 Hi {userData.username}
               </Typography>
               <Typography variant="body1" color="#666666">
-                Wecome to Semicolon Task Management
+                Wecome to Worknest Task Management
               </Typography>
             </Stack>
           </Stack>

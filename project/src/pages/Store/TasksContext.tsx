@@ -8,22 +8,23 @@ import {
 import { useAuthContext } from "./AuthContext";
 import axios from "axios";
 import { useUserContext } from "./UserContext";
+import { Dayjs } from "dayjs";
 
 interface Task {
   // Task: {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   status: string;
-  created: Date;
-  duo: Date;
+  created: number;
+  duo: Dayjs | null;
   // };
 }
 
 interface TaskState {
   tasks: Task[] | "loading" | null;
   setTasks: (tasks: Task[]) => void;
-  addTask: (task: Omit<Task, "id" | "created">) => Promise<void>; // Create
+  addTask: (task: Omit<Task, "_id" | "created">) => Promise<void>; // Create
   updateTask: (id: string, updatedTask: Partial<Task>) => Promise<void>; // Update
   deleteTask: (id: string) => Promise<void>; // Delete
 }
@@ -77,10 +78,10 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
     }
   }, [token, userData.currentWorkspace]);
 
-  const addTask = async (newTask: Omit<Task, "id" | "created">) => {
+  const addTask = async (newTask: Omit<Task, "_id" | "created">) => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/api/workspace/tasks`,
+        `http://localhost:9000/api/task`,
         newTask,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -98,8 +99,8 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
 
   const updateTask = async (id: string, updatedTask: Partial<Task>) => {
     try {
-      const response = await axios.patch(
-        `http://localhost:9000/api/workspace/tasks/${id}`,
+      const response = await axios.put(
+        `http://localhost:9000/api/task?id=${id}`,
         updatedTask,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -107,7 +108,7 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
       );
       setTasks((prevTasks) =>
         prevTasks && prevTasks !== "loading"
-          ? prevTasks.map((task) => (task.id === id ? response.data : task))
+          ? prevTasks.map((task) => (task._id === id ? response.data : task))
           : prevTasks
       );
     } catch (error) {
@@ -117,12 +118,12 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
 
   const deleteTask = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:9000/api/workspace/tasks/${id}`, {
+      await axios.delete(`http://localhost:9000/api/task?id=${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks((prevTasks) =>
         prevTasks && prevTasks !== "loading"
-          ? prevTasks.filter((task) => task.id !== id)
+          ? prevTasks.filter((task) => task._id !== id)
           : prevTasks
       );
     } catch (error) {

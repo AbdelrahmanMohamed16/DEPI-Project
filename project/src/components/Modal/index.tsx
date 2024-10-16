@@ -14,25 +14,39 @@ import {
   InputLabel,
   SelectChangeEvent,
 } from "@mui/material";
-import Joi from "joi";
+import Joi, { date } from "joi";
+import { useTasksContext } from "../../pages/Store/TasksContext";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function Modal() {
   const [open, setOpen] = useState<boolean>(false);
 
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<{
+    title: string;
+    status: string;
+    description: string;
+    duo: Dayjs | null;
+  }>({
     title: "",
     status: "",
     description: "",
+    duo: null,
   });
+
+  const { addTask } = useTasksContext();
 
   const [errors, setErrors] = useState<{
     title: string;
     status: string;
     description: string;
+    duo: string;
   }>({
     title: "",
     status: "",
     description: "",
+    duo: "",
   });
 
   const openModal = () => {
@@ -56,7 +70,7 @@ export default function Modal() {
           "string.pattern.base": "Title must start with a letter",
         }),
       status: Joi.string()
-        .valid("In Progress", "Pending", "Completed")
+        .valid("in progress", "pending", "completed")
         .required()
         .messages({
           "any.required": "Status is required",
@@ -71,14 +85,21 @@ export default function Modal() {
           "string.min": "Description must be at least 5 characters long",
           "string.pattern.base": "Description must start with a letter",
         }),
+      duo: Joi.any().required(),
     });
 
     const { error } = schema.validate(formValues, { abortEarly: false });
 
-    const newErrors: { title: string; status: string; description: string } = {
+    const newErrors: {
+      title: string;
+      status: string;
+      description: string;
+      duo: string;
+    } = {
       title: "",
       status: "",
       description: "",
+      duo: "",
     };
 
     if (error) {
@@ -102,6 +123,13 @@ export default function Modal() {
     });
   };
 
+  const handleDateChange = (newDate: Dayjs | null) => {
+    setFormValues({
+      ...formValues,
+      duo: newDate,
+    });
+  };
+
   const handleSelectChange = (event: SelectChangeEvent<string>) => {
     setFormValues({
       ...formValues,
@@ -116,19 +144,22 @@ export default function Modal() {
         title: formValues.title,
         status: formValues.status,
         description: formValues.description,
+        duo: formValues.duo,
       };
 
-      console.log(localStorage.getItem("tasks"));
-      let existingTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+      addTask(newTask);
 
-      existingTasks = existingTasks ? existingTasks : [];
+      // console.log(localStorage.getItem("tasks"));
+      // let existingTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
-      existingTasks.push(newTask);
+      // existingTasks = existingTasks ? existingTasks : [];
 
-      localStorage.setItem("tasks", JSON.stringify(existingTasks));
+      // existingTasks.push(newTask);
 
-      setFormValues({ title: "", status: "", description: "" });
-      setErrors({ title: "", status: "", description: "" });
+      // localStorage.setItem("tasks", JSON.stringify(existingTasks));
+
+      setFormValues({ title: "", status: "", description: "", duo: null });
+      setErrors({ title: "", status: "", description: "", duo: "" });
       closeModal();
     }
   };
@@ -174,9 +205,9 @@ export default function Modal() {
                   label="Status"
                   error={!!errors.status}
                 >
-                  <MenuItem value="In Progress">In Progress</MenuItem>
-                  <MenuItem value="Pending">Pending</MenuItem>
-                  <MenuItem value="Completed">Completed</MenuItem>
+                  <MenuItem value="in progress">In Progress</MenuItem>
+                  <MenuItem value="pending">Pending</MenuItem>
+                  <MenuItem value="completed">Completed</MenuItem>
                 </Select>
               </FormControl>
               {errors.status && (
@@ -198,6 +229,18 @@ export default function Modal() {
               {errors.description && (
                 <span style={{ color: "red" }}>{errors.description}</span>
               )}
+
+              <FormControl fullWidth margin="dense" variant="outlined">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Duo"
+                    name="Duo"
+                    onChange={handleDateChange}
+                    value={formValues.duo}
+                  />
+                </LocalizationProvider>
+              </FormControl>
+              {errors.duo && <span style={{ color: "red" }}>{errors.duo}</span>}
             </Stack>
           </FormControl>
         </DialogContent>

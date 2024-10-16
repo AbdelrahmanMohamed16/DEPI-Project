@@ -7,51 +7,69 @@ import TabPanel from "@mui/lab/TabPanel";
 import "./viewTasks.css";
 import Modal from "./../../components/Modal/index";
 import TaskCard from "./../../components/TaskCard/index";
+import { useTasksContext } from "../Store/TasksContext";
 
 export default function ViewTasks() {
   const [value, setValue] = useState("1");
-  const [tasks, setTasks] = useState<
-    { title: string; status: string; description: string }[]
-  >(JSON.parse(localStorage.getItem("tasks") || "[]") || []);
+  const { tasks, updateTask, deleteTask } = useTasksContext();
+  if (tasks === "loading") return <p>Loading....</p>;
 
-  useEffect(() => {
-    const storedTasks = localStorage.getItem("tasks");
-    if (storedTasks) {
-      setTasks(JSON.parse(storedTasks));
-    }
-  }, []);
+  // const [tasks, setTasks] = useState<
+  //   { title: string; status: string; description: string }[]
+  // >(JSON.parse(localStorage.getItem("tasks") || "[]") || []);
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+  // useEffect(() => {
+  //   const storedTasks = localStorage.getItem("tasks");
+  //   if (storedTasks) {
+  //     setTasks(JSON.parse(storedTasks));
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   localStorage.setItem("tasks", JSON.stringify(tasks));
+  // }, [tasks]);
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
-  const handleStatusChange = (taskIndex: number, newStatus: string) => {
-    const updatedTasks = [...tasks];
-    updatedTasks[taskIndex].status = newStatus;
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-    setTasks(updatedTasks);
+  const handleStatusChange = (id: string, value: string) => {
+    updateTask(id, { status: value });
   };
 
-  const handleDelete = (taskIndex: number) => {
-    const updatedTasks = tasks.filter((_, index) => index !== taskIndex);
-    setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  const handleUpdate = (id: string, updatedTask: object) => {
+    // updatedTask[property] = value;
+    // removeEmptyProperties(updateTask);
+    updateTask(id, updatedTask);
+    // updatedTask = {
+    //   title: "",
+    //   description: "",
+    //   status: "",
+    //   created: "",
+    //   duo: "",
+    // };
   };
 
-  const handleUpdate = (
-    index: number,
-    updatedTask: { title: string; status: string; description: string }
-  ) => {
-    const updatedTasks = tasks.map((task, i) =>
-      i === index ? updatedTask : task
-    );
-    setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  // const handleDelete = (taskIndex: number) => {
+  //   const updatedTasks = tasks.filter((_, index) => index !== taskIndex);
+  //   setTasks(updatedTasks);
+  //   localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  // };
+
+  const handleDelete = (id: string) => {
+    deleteTask(id);
   };
+
+  // const handleUpdate = (
+  //   index: number,
+  //   updatedTask: { title: string; status: string; description: string }
+  // ) => {
+  //   const updatedTasks = tasks.map((task, i) =>
+  //     i === index ? updatedTask : task
+  //   );
+  //   setTasks(updatedTasks);
+  //   localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  // };
 
   return (
     <Grid container mt={3} mx={3}>
@@ -71,7 +89,9 @@ export default function ViewTasks() {
               Your Tasks in your Space
             </Typography>
           </Stack>
-          <Modal />
+          <Stack mr={7}>
+            <Modal />
+          </Stack>
         </Stack>
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
@@ -92,7 +112,7 @@ export default function ViewTasks() {
                   value="1"
                   icon={
                     <Badge
-                      badgeContent={tasks.length}
+                      badgeContent={tasks?.length}
                       anchorOrigin={{
                         vertical: "top",
                         horizontal: "right",
@@ -117,7 +137,8 @@ export default function ViewTasks() {
                   icon={
                     <Badge
                       badgeContent={
-                        tasks.filter((task) => task.status === "Pending").length
+                        tasks?.filter((task) => task.status === "pending")
+                          .length
                       }
                       anchorOrigin={{
                         vertical: "top",
@@ -141,7 +162,7 @@ export default function ViewTasks() {
                   icon={
                     <Badge
                       badgeContent={
-                        tasks.filter((task) => task.status === "In Progress")
+                        tasks?.filter((task) => task.status === "in progress")
                           .length
                       }
                       anchorOrigin={{
@@ -166,7 +187,7 @@ export default function ViewTasks() {
                   icon={
                     <Badge
                       badgeContent={
-                        tasks.filter((task) => task.status === "Completed")
+                        tasks?.filter((task) => task.status === "completed")
                           .length
                       }
                       anchorOrigin={{
@@ -187,7 +208,7 @@ export default function ViewTasks() {
             </Box>
             <TabPanel value="1">
               <Grid container spacing={2}>
-                {tasks.length === 0 ? (
+                {tasks?.length === 0 ? (
                   <Typography
                     variant="body1"
                     color="text.secondary"
@@ -198,18 +219,20 @@ export default function ViewTasks() {
                     workflow!
                   </Typography>
                 ) : (
-                  tasks.map((task, index) => (
-                    <Grid item xs={12} sm={6} key={index}>
+                  tasks?.map((task) => (
+                    <Grid item xs={12} sm={6} key={task._id}>
                       <TaskCard
+                        id={task._id}
                         title={task.title}
                         description={task.description}
                         status={task.status}
+                        duo={task.duo}
                         onStatusChange={(newStatus) =>
-                          handleStatusChange(index, newStatus)
+                          handleStatusChange(task._id, newStatus)
                         }
-                        onDelete={() => handleDelete(index)}
+                        onDelete={() => handleDelete(task._id)}
                         onUpdate={(updatedTask) =>
-                          handleUpdate(index, updatedTask)
+                          handleUpdate(task._id, updatedTask)
                         }
                       />
                     </Grid>
@@ -219,7 +242,7 @@ export default function ViewTasks() {
             </TabPanel>
             <TabPanel value="2">
               <Grid container spacing={2}>
-                {tasks.filter((task) => task.status === "Pending").length ===
+                {tasks?.filter((task) => task.status === "pending").length ===
                 0 ? (
                   <Typography
                     variant="body1"
@@ -231,19 +254,21 @@ export default function ViewTasks() {
                   </Typography>
                 ) : (
                   tasks
-                    .filter((task) => task.status === "Pending")
-                    .map((task, index) => (
-                      <Grid item xs={12} sm={6} key={index}>
+                    ?.filter((task) => task.status === "pending")
+                    .map((task) => (
+                      <Grid item xs={12} sm={6} key={task._id}>
                         <TaskCard
+                          id={task._id}
                           title={task.title}
                           description={task.description}
                           status={task.status}
+                          duo={task.duo}
                           onStatusChange={(newStatus) =>
-                            handleStatusChange(index, newStatus)
+                            handleStatusChange(task._id, newStatus)
                           }
-                          onDelete={() => handleDelete(index)}
+                          onDelete={() => handleDelete(task._id)}
                           onUpdate={(updatedTask) =>
-                            handleUpdate(index, updatedTask)
+                            handleUpdate(task._id, updatedTask)
                           }
                         />
                       </Grid>
@@ -253,7 +278,7 @@ export default function ViewTasks() {
             </TabPanel>
             <TabPanel value="3">
               <Grid container spacing={2}>
-                {tasks.filter((task) => task.status === "In Progress")
+                {tasks?.filter((task) => task.status === "in progress")
                   .length === 0 ? (
                   <Typography
                     variant="body1"
@@ -266,19 +291,21 @@ export default function ViewTasks() {
                   </Typography>
                 ) : (
                   tasks
-                    .filter((task) => task.status === "In Progress")
-                    .map((task, index) => (
-                      <Grid item xs={12} sm={6} key={index}>
+                    ?.filter((task) => task.status === "in progress")
+                    .map((task) => (
+                      <Grid item xs={12} sm={6} key={task._id}>
                         <TaskCard
+                          id={task._id}
                           title={task.title}
                           description={task.description}
                           status={task.status}
+                          duo={task.duo}
                           onStatusChange={(newStatus) =>
-                            handleStatusChange(index, newStatus)
+                            handleStatusChange(task._id, newStatus)
                           }
-                          onDelete={() => handleDelete(index)}
+                          onDelete={() => handleDelete(task._id)}
                           onUpdate={(updatedTask) =>
-                            handleUpdate(index, updatedTask)
+                            handleUpdate(task._id, updatedTask)
                           }
                         />
                       </Grid>
@@ -288,7 +315,7 @@ export default function ViewTasks() {
             </TabPanel>
             <TabPanel value="4">
               <Grid container spacing={2}>
-                {tasks.filter((task) => task.status === "Completed").length ===
+                {tasks?.filter((task) => task.status === "completed").length ===
                 0 ? (
                   <Typography
                     variant="body1"
@@ -301,19 +328,21 @@ export default function ViewTasks() {
                   </Typography>
                 ) : (
                   tasks
-                    .filter((task) => task.status === "Completed")
-                    .map((task, index) => (
-                      <Grid item xs={12} sm={6} key={index}>
+                    ?.filter((task) => task.status === "completed")
+                    .map((task) => (
+                      <Grid item xs={12} sm={6} key={task._id}>
                         <TaskCard
+                          id={task._id}
                           title={task.title}
                           description={task.description}
                           status={task.status}
+                          duo={task.duo}
                           onStatusChange={(newStatus) =>
-                            handleStatusChange(index, newStatus)
+                            handleStatusChange(task._id, newStatus)
                           }
-                          onDelete={() => handleDelete(index)}
+                          onDelete={() => handleDelete(task._id)}
                           onUpdate={(updatedTask) =>
-                            handleUpdate(index, updatedTask)
+                            handleUpdate(task._id, updatedTask)
                           }
                         />
                       </Grid>
