@@ -10,6 +10,7 @@ import ViewTasks from "./pages/ViewTasks";
 import { TasksContextProvider } from "./pages/Store/TasksContext";
 import Workspace from "./pages/Workspace";
 import { NotFound } from "./pages/NotFound";
+import Settings from "./pages/Settings";
 
 const App: React.FC = () => {
   const { userData } = useUserContext();
@@ -17,6 +18,7 @@ const App: React.FC = () => {
   const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
     children,
   }) => {
+    console.log(userData);
     return userData ? (
       <>{children}</>
     ) : userData === "loading" ? (
@@ -82,7 +84,7 @@ const App: React.FC = () => {
             path="settings"
             element={
               <TasksContextProvider>
-                <ViewTasks />
+                <Settings />
               </TasksContextProvider>
             }
           />
