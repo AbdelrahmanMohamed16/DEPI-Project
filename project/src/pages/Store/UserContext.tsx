@@ -15,12 +15,14 @@ interface UserState {
     username: string;
     email: string;
     avatar: string;
+    currentWorkspace: string;
   };
   setUserData: (
     id: string,
     username: string,
     email: string,
-    avatar: string
+    avatar: string,
+    currentWorkspace: string
   ) => void;
 }
 
@@ -46,15 +48,15 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
 
   useEffect(() => {
     const fetchUserData = async () => {
-      setUserData("Loading");
+      setUserData("loading");
       try {
         const { id } = jwtDecode<any>(token); // Decode the token and get the ID
-        const response = await axios.get(
-          `http://localhost:9000/api/user?id=${id}`
-        );
-        const { username, email, avatar } = response.data; // Destructure the response data
+        const response = await axios.get(`http://localhost:9000/api/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const { username, email, avatar, currentWorkspace } = response.data; // Destructure the response data
 
-        setUserData({ id, username, email, avatar }); // Set the user data in state
+        setUserData({ id, username, email, avatar, currentWorkspace }); // Set the user data in state
       } catch (error) {
         console.error("Error fetching user data:", error);
         setUserData(null); // Reset user data if there is an error

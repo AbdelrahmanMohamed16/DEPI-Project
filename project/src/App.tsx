@@ -13,6 +13,8 @@ import LeftSidebar from "./components/LeftSidebar";
 import Navbar from "./components/Navbar";
 import RightSidebar from "./components/RightSidebar";
 import { NotFound } from "./pages/NotFound";
+import { TasksContextProvider } from "./pages/Store/TasksContext";
+import Workspace from "./pages/Workspace";
 
 const App: React.FC = () => {
   const { userData } = useUserContext();
@@ -38,6 +40,7 @@ const App: React.FC = () => {
           path="login"
           element={userData ? <Navigate to={"/"} /> : <Login />}
         />
+        <Route path="createworkspace" element={<Workspace />} />
         <Route
           path="/*"
           element={
@@ -52,7 +55,9 @@ const App: React.FC = () => {
             path=""
             element={
               <ProtectedRoute>
-                <Overview />
+                <TasksContextProvider>
+                  <Overview />
+                </TasksContextProvider>
               </ProtectedRoute>
             }
           />
@@ -60,7 +65,9 @@ const App: React.FC = () => {
             path="overview"
             element={
               <ProtectedRoute>
-                <Overview />
+                <TasksContextProvider>
+                  <Overview />
+                </TasksContextProvider>
               </ProtectedRoute>
             }
           />
@@ -68,7 +75,9 @@ const App: React.FC = () => {
             path="tasks"
             element={
               <ProtectedRoute>
-                <ViewTasks />
+                <TasksContextProvider>
+                  <ViewTasks />
+                </TasksContextProvider>
               </ProtectedRoute>
             }
           />
