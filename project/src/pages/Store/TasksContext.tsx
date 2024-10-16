@@ -21,8 +21,16 @@ interface Task {
   // };
 }
 
+interface Workspace {
+  _id: string;
+  title: string;
+  image: string;
+}
+
 interface TaskState {
   tasks: Task[] | "loading" | null;
+  workspace: Workspace | "loading" | null;
+  setWorkspace: (workspace: Workspace) => void;
   setTasks: (tasks: Task[]) => void;
   addTask: (task: Omit<Task, "_id" | "created">) => Promise<void>; // Create
   updateTask: (id: string, updatedTask: Partial<Task>) => Promise<void>; // Update
@@ -53,6 +61,9 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
   const [tasks, setTasks] = useState<Task[] | "loading" | null>(
     token ? "loading" : null
   );
+  const [workspace, setWorkspace] = useState<Workspace | "loading" | null>(
+    token ? "loading" : null
+  );
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -65,7 +76,6 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
           }
         );
         const tasksData = response.data;
-        console.log(response.data);
         setTasks(tasksData);
       } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -73,8 +83,26 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
       }
     };
 
+    const fetchWorkspace = async () => {
+      setWorkspace("loading");
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/api/workspace`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const workspace = response.data;
+        setWorkspace(workspace);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+        setWorkspace(null);
+      }
+    };
+
     if (token) {
       fetchTasks();
+      fetchWorkspace();
     }
   }, [token, userData.currentWorkspace]);
 
@@ -135,6 +163,8 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
     <tasksContext.Provider
       value={{
         tasks,
+        workspace,
+        setWorkspace,
         setTasks,
         addTask,
         updateTask,

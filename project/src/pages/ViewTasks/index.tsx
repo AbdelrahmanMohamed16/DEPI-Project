@@ -1,5 +1,5 @@
 import { Badge, Box, Grid, Stack, Typography } from "@mui/material";
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";

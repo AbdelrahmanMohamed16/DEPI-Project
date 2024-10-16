@@ -46,8 +46,6 @@ export default function TaskCard({
     onStatusChange("Completed");
   };
 
-  console.log(id);
-
   return (
     <Card
       sx={{
