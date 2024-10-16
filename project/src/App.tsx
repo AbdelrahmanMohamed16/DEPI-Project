@@ -85,9 +85,9 @@ const App: React.FC = () => {
           path="*"
           element={
             <ProtectedRoute>
-              <UserContextProvider>
+
                 <NotFound />
-              </UserContextProvider>
+
             </ProtectedRoute>
           }
         />
