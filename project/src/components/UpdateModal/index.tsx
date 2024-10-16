@@ -56,8 +56,6 @@ export default function UpdateModal({
     duo: dayjs(task.duo),
   });
 
-  console.log(task);
-
   const [errors, setErrors] = useState({
     title: "",
     status: "",

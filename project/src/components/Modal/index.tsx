@@ -14,10 +14,10 @@ import {
   InputLabel,
   SelectChangeEvent,
 } from "@mui/material";
-import Joi, { date } from "joi";
+import Joi from "joi";
 import { useTasksContext } from "../../pages/Store/TasksContext";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function Modal() {
@@ -148,15 +148,6 @@ export default function Modal() {
       };
 
       addTask(newTask);
-
-      // console.log(localStorage.getItem("tasks"));
-      // let existingTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-
-      // existingTasks = existingTasks ? existingTasks : [];
-
-      // existingTasks.push(newTask);
-
-      // localStorage.setItem("tasks", JSON.stringify(existingTasks));
 
       setFormValues({ title: "", status: "", description: "", duo: null });
       setErrors({ title: "", status: "", description: "", duo: "" });

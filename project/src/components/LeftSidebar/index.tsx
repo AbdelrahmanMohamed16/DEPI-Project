@@ -20,9 +20,10 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Padding } from "@mui/icons-material";
+import { useTasksContext } from "../../pages/Store/TasksContext";
 export default function LeftSidebar() {
   const [open, setOpen] = React.useState(false);
+  const { workspace } = useTasksContext();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -93,7 +94,11 @@ export default function LeftSidebar() {
             My Space
           </Typography>
           <Typography variant="subtitle1" sx={{ color: "#666666" }}>
-            Workspace Title
+            {workspace
+              ? workspace !== "loading"
+                ? workspace.title
+                : "Loading...."
+              : ""}
           </Typography>
         </Box>
         <Stack sx={{ width: "fit-content", alignItems: "start" }}>
