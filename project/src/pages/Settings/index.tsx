@@ -6,13 +6,38 @@ import {
   Stack,
   Switch,
   Typography,
+  Modal,
+  TextField,
 } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import PasswordIcon from "@mui/icons-material/Password";
 
 export default function Settings() {
+  const [open, setOpen] = useState(false);
+  const [userData, setUserData] = useState({
+    fullname: "Adeeko Emmanuel",
+    email: "emmy4sure.web@gmail.com",
+    password: "********",
+  });
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setUserData({
+      ...userData,
+      [name]: value,
+    });
+  };
+
+  const handleSave = () => {
+    // Handle save logic here (e.g., API call to save changes)
+    setOpen(false); // Close modal after saving
+  };
+
   return (
     <>
       <Stack>
@@ -55,16 +80,13 @@ export default function Settings() {
                   display: "flex",
                 }}
               >
-                <PersonIcon
-                  sx={{ fontSize: 50, mr: 3, color: "#3754DB" }}
-                ></PersonIcon>
-
+                <PersonIcon sx={{ fontSize: 50, mr: 3, color: "#3754DB" }} />
                 <Box>
                   <Typography sx={{ fontSize: "12px" }} variant="h6">
                     Fullname
                   </Typography>
                   <Typography sx={{ fontWeight: "bold", fontSize: "19px" }}>
-                    Adeeko Emmanuel
+                    {userData.fullname}
                   </Typography>
                 </Box>
               </Box>
@@ -80,15 +102,13 @@ export default function Settings() {
                   display: "flex",
                 }}
               >
-                <EmailIcon
-                  sx={{ fontSize: 50, mr: 3, color: "#3754DB" }}
-                ></EmailIcon>
+                <EmailIcon sx={{ fontSize: 50, mr: 3, color: "#3754DB" }} />
                 <Box>
                   <Typography variant="h6" sx={{ fontSize: "12px" }}>
                     Email Address
                   </Typography>
                   <Typography sx={{ fontWeight: "bold", fontSize: "19px" }}>
-                    emmy4sure.web@gmail.com
+                    {userData.email}
                   </Typography>
                 </Box>
               </Box>
@@ -108,17 +128,16 @@ export default function Settings() {
                   <Typography sx={{ fontSize: "12px" }} variant="h6">
                     Password
                   </Typography>
-                  <PasswordIcon></PasswordIcon>
-                  <PasswordIcon></PasswordIcon>
-                  <PasswordIcon></PasswordIcon>
-                  <PasswordIcon></PasswordIcon>
+                  <Typography sx={{ fontWeight: "bold", fontSize: "19px" }}>
+                    {"•".repeat(userData.password.length)}
+                  </Typography>
                 </Box>
               </Box>
             </Grid>
 
             <Stack sx={{ ml: "auto" }}>
               <Button
-                // onClick={openModal}
+                onClick={handleOpen}
                 variant="contained"
                 size="medium"
                 sx={{
@@ -136,6 +155,76 @@ export default function Settings() {
             </Stack>
           </Grid>
         </Container>
+
+        {/* Modal for editing */}
+
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="edit-user-modal"
+          aria-describedby="edit-user-modal-description"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              borderRadius: 3,
+              boxShadow: 24,
+              py: 7,
+              px: 4,
+            }}
+          >
+            <Typography id="edit-user-modal" variant="h6" component="h2">
+              Edit User Information
+            </Typography>
+            <TextField
+              label="Fullname"
+              name="fullname"
+              value={userData.fullname}
+              onChange={handleChange}
+              fullWidth
+              sx={{ mt: 3 }}
+            />
+            <TextField
+              label="Email"
+              name="email"
+              value={userData.email}
+              onChange={handleChange}
+              fullWidth
+              sx={{ mt: 3 }}
+            />
+            <TextField
+              label="Password"
+              name="password"
+              type="password"
+              value={userData.password}
+              onChange={handleChange}
+              fullWidth
+              sx={{ mt: 3 }}
+            />
+            <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ backgroundColor: "#3754DB", color: "#fff" }}
+                onClick={handleSave}
+              >
+                Save
+              </Button>
+              <Button
+                variant="outlined"
+                sx={{ backgroundColor: "#3754DB", color: "#fff" }}
+                onClick={handleClose}
+              >
+                Cancel
+              </Button>
+            </Stack>
+          </Box>
+        </Modal>
 
         <Container>
           <Typography sx={{ mt: 5 }} variant="h6">
