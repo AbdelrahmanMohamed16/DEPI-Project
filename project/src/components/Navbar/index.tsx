@@ -10,7 +10,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useState } from "react";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { useTasksContext } from "../../pages/Store/TasksContext";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -85,64 +85,25 @@ export default function Navbar() {
   const [loading, setLoading] = useState(false);
   const { tasks } = useTasksContext();
 
-  const nearDuoDate = (tasks: Task[]) => {
-    const today = dayjs();
-    const threeDaysFromNow = today.add(3, "day");
-
-    return tasks.filter((task) => {
-      const taskDueDate = dayjs(task.duo);
-      return (
-        taskDueDate.isAfter(today) &&
-        taskDueDate.isBefore(threeDaysFromNow) &&
-        task.status !== "completed"
-      );
-    });
-  };
-
-  if (tasks !== "loading" && tasks !== null) {
-    nearDuoDate(tasks);
-  }
-
-  function NotificationRing({ tasks }: any) {
-    if (tasks !== "loading" && tasks !== null) {
-      const nextTasks = nearDuoDate(tasks);
-      console.log(nextTasks);
-      return (
-        <Box sx={{ display: { md: "flex" } }}>
-          <IconButton
-            size="large"
-            aria-label={`show ${nextTasks.length} new notifications`}
-            color="inherit"
-          >
-            <Badge badgeContent={nextTasks.length} color="error">
-              <NotificationsIcon
-                sx={{
-                  color: "#3754DB",
-                }}
-              />
-            </Badge>
-          </IconButton>
-        </Box>
-      );
-    } else {
-      return (
-        <Box sx={{ display: { md: "flex" } }}>
-          <IconButton
-            size="large"
-            aria-label={`show 0 new notifications`}
-            color="inherit"
-          >
-            <Badge badgeContent={0} color="error">
-              <NotificationsIcon
-                sx={{
-                  color: "#3754DB",
-                }}
-              />
-            </Badge>
-          </IconButton>
-        </Box>
-      );
-    }
+  function NotificationRing() {
+    const { tasksDueDate } = useTasksContext();
+    return (
+      <Box sx={{ display: { md: "flex" } }}>
+        <IconButton
+          size="large"
+          aria-label={`show ${tasksDueDate?.length} new notifications`}
+          color="inherit"
+        >
+          <Badge badgeContent={tasksDueDate?.length} color="error">
+            <NotificationsIcon
+              sx={{
+                color: "#3754DB",
+              }}
+            />
+          </Badge>
+        </IconButton>
+      </Box>
+    );
   }
 
   const handleOpen = () => {
@@ -215,7 +176,7 @@ export default function Navbar() {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <NotificationRing tasks={tasks}></NotificationRing>
+          <NotificationRing />
         </Toolbar>
       </AppBar>
     </Box>

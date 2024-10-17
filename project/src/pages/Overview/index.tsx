@@ -4,43 +4,17 @@ import { useUserContext } from "../Store/UserContext";
 import WavingHandIcon from "@mui/icons-material/WavingHand";
 import cover from "../../assets/kobu.jpeg";
 import { useTasksContext } from "../Store/TasksContext";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import SimpleTaskCard from "../../components/SimpleTaskCard";
-
-interface Task {
-  // Task: {
-  _id: string;
-  title: string;
-  description: string;
-  status: string;
-  created: number;
-  duo: Dayjs | null;
-  // };
-}
 
 export default function Overview() {
   const { userData } = useUserContext();
-  const { tasks } = useTasksContext();
-  const nearDuoDate = (tasks: Task[]) => {
-    const today = dayjs();
-    const threeDaysFromNow = today.add(3, "day");
-
-    return tasks.filter((task) => {
-      const taskDueDate = dayjs(task.duo);
-      return (
-        taskDueDate.isAfter(today) &&
-        taskDueDate.isBefore(threeDaysFromNow) &&
-        task.status !== "completed"
-      );
-    });
-  };
-
+  const { tasksDueDate } = useTasksContext();
   function Tasks() {
-    if (tasks !== "loading" && tasks !== null) {
-      const nextTasks = nearDuoDate(tasks);
+    if (tasksDueDate !== "loading" && tasksDueDate !== null) {
       return (
         <Grid container spacing={2}>
-          {nextTasks?.map((task) => (
+          {tasksDueDate?.map((task) => (
             <Grid item xs={12} sm={6} key={task._id}>
               <SimpleTaskCard
                 id={task._id}

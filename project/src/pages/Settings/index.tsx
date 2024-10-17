@@ -13,30 +13,50 @@ import React, { useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import PasswordIcon from "@mui/icons-material/Password";
+import { useUserContext } from "../Store/UserContext";
+import { useAuthContext } from "../Store/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
   const [open, setOpen] = useState(false);
-  const [userData, setUserData] = useState({
-    fullname: "Adeeko Emmanuel",
-    email: "emmy4sure.web@gmail.com",
-    password: "********",
+  const { userData, updateUser } = useUserContext();
+  const { logout } = useAuthContext();
+  const [formData, setFormData] = useState({
+    username: userData?.username,
+    email: userData?.email,
+    password: "",
+    currentWorkspace: "",
   });
+  const navigate = useNavigate();
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  function removeEmptyProperties(obj: any) {
+    return Object.entries(obj).reduce((acc: any, [key, value]) => {
+      if (value !== "" && value !== null && value !== undefined) {
+        // Adjust conditions as needed
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+  }
 
-  const handleChange = (e: any) => {
+  // Handle input changes for all fields
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
-    setUserData({
-      ...userData,
-      [name]: value,
+    setFormData({
+      ...formData,
+      [name]: value, // Dynamically update the field by its name
     });
   };
 
+  // Handle form submission (e.g., save button click)
   const handleSave = () => {
-    // Handle save logic here (e.g., API call to save changes)
-    setOpen(false); // Close modal after saving
+    updateUser(removeEmptyProperties(formData));
+    // Here you can send the formData object to your API or handle it as needed
+    handleClose(); // Close the modal after submission
   };
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -53,6 +73,10 @@ export default function Settings() {
             alignSelf: "flex-end",
             px: 3,
             py: 1,
+          }}
+          onClick={() => {
+            logout();
+            navigate("/login");
           }}
         >
           Log Out
@@ -86,7 +110,7 @@ export default function Settings() {
                     Fullname
                   </Typography>
                   <Typography sx={{ fontWeight: "bold", fontSize: "19px" }}>
-                    {userData.fullname}
+                    {userData?.username}
                   </Typography>
                 </Box>
               </Box>
@@ -108,7 +132,7 @@ export default function Settings() {
                     Email Address
                   </Typography>
                   <Typography sx={{ fontWeight: "bold", fontSize: "19px" }}>
-                    {userData.email}
+                    {userData?.email}
                   </Typography>
                 </Box>
               </Box>
@@ -129,7 +153,7 @@ export default function Settings() {
                     Password
                   </Typography>
                   <Typography sx={{ fontWeight: "bold", fontSize: "19px" }}>
-                    {"•".repeat(userData.password.length)}
+                    {"*".repeat(8)}
                   </Typography>
                 </Box>
               </Box>
@@ -156,8 +180,6 @@ export default function Settings() {
           </Grid>
         </Container>
 
-        {/* Modal for editing */}
-
         <Modal
           open={open}
           onClose={handleClose}
@@ -181,31 +203,35 @@ export default function Settings() {
             <Typography id="edit-user-modal" variant="h6" component="h2">
               Edit User Information
             </Typography>
+
             <TextField
               label="Fullname"
-              name="fullname"
-              value={userData.fullname}
-              onChange={handleChange}
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
               fullWidth
               sx={{ mt: 3 }}
             />
+
             <TextField
               label="Email"
               name="email"
-              value={userData.email}
-              onChange={handleChange}
+              value={formData.email}
+              onChange={handleInputChange}
               fullWidth
               sx={{ mt: 3 }}
             />
+
             <TextField
               label="Password"
               name="password"
               type="password"
-              value={userData.password}
-              onChange={handleChange}
+              value={formData.password}
+              onChange={handleInputChange}
               fullWidth
               sx={{ mt: 3 }}
             />
+
             <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
               <Button
                 variant="contained"

@@ -20,10 +20,8 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
 import { Link } from "react-router-dom";
-import { useTasksContext } from "../../pages/Store/TasksContext";
-export default function LeftSidebar() {
+export default function LeftSidebar({ workspace }: any) {
   const [open, setOpen] = React.useState(false);
-  const { workspace } = useTasksContext();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -96,7 +94,7 @@ export default function LeftSidebar() {
           <Typography variant="subtitle1" sx={{ color: "#666666" }}>
             {workspace
               ? workspace !== "loading"
-                ? workspace.title
+                ? workspace?.title
                 : "Loading...."
               : ""}
           </Typography>

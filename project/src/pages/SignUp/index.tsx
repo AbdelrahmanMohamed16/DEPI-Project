@@ -40,7 +40,7 @@ export function SignUp() {
         .trim()
         .min(5)
         .max(200)
-        .required(), // Disable TLD validation
+        .required(),
       password: Joi.string().trim().min(5).max(200).required(),
     });
     return schema.validate(formData, { abortEarly: false });
@@ -57,9 +57,10 @@ export function SignUp() {
       .post("http://localhost:9000/api/auth/register", formData)
       .then((res) => {
         console.log(res);
+        console.log("We Are Here");
+        navigate("/createworkspace");
         setToken(res.data.token);
         localStorage.setItem("Token", res.data.token);
-        navigate("/createworkspace");
       })
       .catch((err) => {
         console.log(err);

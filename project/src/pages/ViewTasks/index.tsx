@@ -11,7 +11,7 @@ import { useTasksContext } from "../Store/TasksContext";
 
 export default function ViewTasks() {
   const [value, setValue] = useState("1");
-  const { tasks, updateTask, deleteTask } = useTasksContext();
+  const { tasks, updateTask, deleteTask, tasksDueDate } = useTasksContext();
   if (tasks === "loading") return <p>Loading....</p>;
 
   // const [tasks, setTasks] = useState<

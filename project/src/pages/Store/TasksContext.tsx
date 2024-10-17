@@ -8,7 +8,7 @@ import {
 import { useAuthContext } from "./AuthContext";
 import axios from "axios";
 import { useUserContext } from "./UserContext";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 interface Task {
   // Task: {
@@ -29,9 +29,12 @@ interface Workspace {
 
 interface TaskState {
   tasks: Task[] | "loading" | null;
+  tasksDueDate: Task[] | "loading" | null;
   workspace: Workspace | "loading" | null;
-  setWorkspace: (workspace: Workspace) => void;
+  workspaces: Workspace[] | "loading" | null;
   setTasks: (tasks: Task[]) => void;
+  setWorkspace: (workspace: Workspace) => void;
+  setWorkspaces: (workspace: Workspace[]) => void;
   addTask: (task: Omit<Task, "_id" | "created">) => Promise<void>; // Create
   updateTask: (id: string, updatedTask: Partial<Task>) => Promise<void>; // Update
   deleteTask: (id: string) => Promise<void>; // Delete
@@ -61,7 +64,13 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
   const [tasks, setTasks] = useState<Task[] | "loading" | null>(
     token ? "loading" : null
   );
+  const [tasksDueDate, setTasksDueDate] = useState<Task[] | "loading" | null>(
+    token ? "loading" : null
+  );
   const [workspace, setWorkspace] = useState<Workspace | "loading" | null>(
+    token ? "loading" : null
+  );
+  const [workspaces, setWorkspaces] = useState<Workspace[] | "loading" | null>(
     token ? "loading" : null
   );
 
@@ -100,11 +109,49 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
       }
     };
 
+    const fetchWorkspaces = async () => {
+      setWorkspaces("loading");
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/api/user/workspaces`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const workspaces = response.data;
+        setWorkspaces(workspaces);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+        setWorkspace(null);
+      }
+    };
+
     if (token) {
-      fetchTasks();
-      fetchWorkspace();
+      fetchWorkspaces().then(fetchWorkspace).then(fetchTasks);
+      // fetchTasks();
+      // fetchWorkspace();
     }
-  }, [token, userData.currentWorkspace]);
+  }, [token, userData?.currentWorkspace]);
+
+  useEffect(() => {
+    const nearDuoDate = (tasks: Task[]) => {
+      const today = dayjs();
+      const threeDaysFromNow = today.add(3, "day");
+
+      return tasks.filter((task) => {
+        const taskDueDate = dayjs(task.duo);
+        return (
+          taskDueDate.isAfter(today) &&
+          taskDueDate.isBefore(threeDaysFromNow) &&
+          task.status !== "completed"
+        );
+      });
+    };
+    if (tasks !== "loading" && tasks !== null) {
+      console.log(tasks);
+      setTasksDueDate(nearDuoDate(tasks));
+    }
+  }, [tasks]);
 
   const addTask = async (newTask: Omit<Task, "_id" | "created">) => {
     try {
@@ -163,9 +210,12 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
     <tasksContext.Provider
       value={{
         tasks,
+        tasksDueDate,
         workspace,
-        setWorkspace,
+        workspaces,
         setTasks,
+        setWorkspace,
+        setWorkspaces,
         addTask,
         updateTask,
         deleteTask,

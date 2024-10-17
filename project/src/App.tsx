@@ -30,75 +30,44 @@ const App: React.FC = () => {
 
   return (
     <UserContextProvider>
-      <Routes>
-        <Route
-          path="signUp"
-          element={userData ? <Navigate to={"/"} /> : <SignUp />}
-        />
-        <Route
-          path="login"
-          element={userData ? <Navigate to={"/"} /> : <Login />}
-        />
-        <Route
-          path="createworkspace"
-          element={
-            <ProtectedRoute>
-              <Workspace />
-            </ProtectedRoute>
-          }
-        />
+      <TasksContextProvider>
+        <Routes>
+          <Route
+            path="signUp"
+            element={userData ? <Navigate to={"/"} /> : <SignUp />}
+          />
+          <Route
+            path="login"
+            element={userData ? <Navigate to={"/"} /> : <Login />}
+          />
+          <Route path="createworkspace" element={<Workspace />} />
 
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        >
           <Route
-            index
+            path="/"
             element={
-              <TasksContextProvider>
-                <Overview />
-              </TasksContextProvider>
+              <ProtectedRoute>
+                <UserContextProvider>
+                  <Home />
+                </UserContextProvider>
+              </ProtectedRoute>
             }
-          />
-          <Route
-            path="overview"
-            element={
-              <TasksContextProvider>
-                <Overview />
-              </TasksContextProvider>
-            }
-          />
-          <Route
-            path="tasks"
-            element={
-              <TasksContextProvider>
-                <ViewTasks />
-              </TasksContextProvider>
-            }
-          />
-          <Route
-            path="settings"
-            element={
-              <TasksContextProvider>
-                <Settings />
-              </TasksContextProvider>
-            }
-          />
-        </Route>
+          >
+            <Route index element={<Overview />} />
+            <Route path="overview" element={<Overview />} />
+            <Route path="tasks" element={<ViewTasks />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
 
-        <Route
-          path="*"
-          element={
-            <ProtectedRoute>
-              <NotFound />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          <Route
+            path="*"
+            element={
+              <ProtectedRoute>
+                <NotFound />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </TasksContextProvider>
     </UserContextProvider>
   );
 };
