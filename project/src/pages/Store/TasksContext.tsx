@@ -35,6 +35,7 @@ interface TaskState {
   setTasks: (tasks: Task[]) => void;
   setWorkspace: (workspace: Workspace) => void;
   setWorkspaces: (workspace: Workspace[]) => void;
+  setDate: (date: Dayjs) => void;
   addTask: (task: Omit<Task, "_id" | "created">) => Promise<void>; // Create
   updateTask: (id: string, updatedTask: Partial<Task>) => Promise<void>; // Update
   deleteTask: (id: string) => Promise<void>; // Delete
@@ -64,6 +65,7 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
   const [tasks, setTasks] = useState<Task[] | "loading" | null>(
     token ? "loading" : null
   );
+  const [date, setDate] = useState<Dayjs | null>(dayjs());
   const [tasksDueDate, setTasksDueDate] = useState<Task[] | "loading" | null>(
     token ? "loading" : null
   );
@@ -128,14 +130,12 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
 
     if (token) {
       fetchWorkspaces().then(fetchWorkspace).then(fetchTasks);
-      // fetchTasks();
-      // fetchWorkspace();
     }
-  }, [token, userData?.currentWorkspace]);
+  }, [token, userData]);
 
   useEffect(() => {
     const nearDuoDate = (tasks: Task[]) => {
-      const today = dayjs();
+      const today = dayjs(date);
       const threeDaysFromNow = today.add(3, "day");
 
       return tasks.filter((task) => {
@@ -151,7 +151,7 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
       console.log(tasks);
       setTasksDueDate(nearDuoDate(tasks));
     }
-  }, [tasks]);
+  }, [date, tasks]);
 
   const addTask = async (newTask: Omit<Task, "_id" | "created">) => {
     try {
@@ -216,6 +216,7 @@ export const TasksContextProvider: React.FC<TasksProviderProps> = ({
         setTasks,
         setWorkspace,
         setWorkspaces,
+        setDate,
         addTask,
         updateTask,
         deleteTask,

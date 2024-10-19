@@ -7,6 +7,7 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import React from "react";
 import { Button, Container, Grid2, Stack, Typography } from "@mui/material";
 import avatar from "../../assets/1.png";
+import { useTasksContext } from "../../pages/Store/TasksContext";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -38,10 +39,11 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 export default function RightSidebar({ userData }: any) {
+  const { setDate } = useTasksContext();
   return (
     <Grid2
       size={{ sm: 3, md: 2 }}
-      offset={0.2}
+      offset={0.8}
       my={2}
       pb={2}
       sx={{
@@ -82,7 +84,12 @@ export default function RightSidebar({ userData }: any) {
             My Profile
           </Button>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateCalendar sx={{ background: "#F6F8FD", width: "100%" }} />
+            <DateCalendar
+              sx={{ background: "#F6F8FD", width: "100%" }}
+              onChange={(value) => {
+                setDate(value);
+              }}
+            />
           </LocalizationProvider>
         </Stack>
       </Container>

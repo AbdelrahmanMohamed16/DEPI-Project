@@ -1,4 +1,4 @@
-import { Badge, Box, Grid, Stack, Typography } from "@mui/material";
+import { Badge, Box, Grid, Grid2, Stack, Typography } from "@mui/material";
 import React, { SyntheticEvent, useState } from "react";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -11,23 +11,8 @@ import { useTasksContext } from "../Store/TasksContext";
 
 export default function ViewTasks() {
   const [value, setValue] = useState("1");
-  const { tasks, updateTask, deleteTask, tasksDueDate } = useTasksContext();
+  const { tasks, updateTask, deleteTask } = useTasksContext();
   if (tasks === "loading") return <p>Loading....</p>;
-
-  // const [tasks, setTasks] = useState<
-  //   { title: string; status: string; description: string }[]
-  // >(JSON.parse(localStorage.getItem("tasks") || "[]") || []);
-
-  // useEffect(() => {
-  //   const storedTasks = localStorage.getItem("tasks");
-  //   if (storedTasks) {
-  //     setTasks(JSON.parse(storedTasks));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem("tasks", JSON.stringify(tasks));
-  // }, [tasks]);
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -38,41 +23,15 @@ export default function ViewTasks() {
   };
 
   const handleUpdate = (id: string, updatedTask: object) => {
-    // updatedTask[property] = value;
-    // removeEmptyProperties(updateTask);
     updateTask(id, updatedTask);
-    // updatedTask = {
-    //   title: "",
-    //   description: "",
-    //   status: "",
-    //   created: "",
-    //   duo: "",
-    // };
   };
-
-  // const handleDelete = (taskIndex: number) => {
-  //   const updatedTasks = tasks.filter((_, index) => index !== taskIndex);
-  //   setTasks(updatedTasks);
-  //   localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-  // };
 
   const handleDelete = (id: string) => {
     deleteTask(id);
   };
 
-  // const handleUpdate = (
-  //   index: number,
-  //   updatedTask: { title: string; status: string; description: string }
-  // ) => {
-  //   const updatedTasks = tasks.map((task, i) =>
-  //     i === index ? updatedTask : task
-  //   );
-  //   setTasks(updatedTasks);
-  //   localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-  // };
-
   return (
-    <Grid container mt={3} mx={3}>
+    <Grid container mt={3} mx={{ md: 3 }} p={{ xs: 3 }}>
       <Grid sx={{ width: "100%" }}>
         <Stack
           sx={{
@@ -206,8 +165,14 @@ export default function ViewTasks() {
                 />
               </TabList>
             </Box>
-            <TabPanel value="1">
-              <Grid container spacing={2}>
+            <TabPanel value="1" sx={{ paddingX: 0, width: "100%" }}>
+              <Grid2
+                container
+                display={"flex"}
+                flexDirection={"row"}
+                spacing={4}
+                flexWrap={"wrap"}
+              >
                 {tasks?.length === 0 ? (
                   <Typography
                     variant="body1"
@@ -220,28 +185,33 @@ export default function ViewTasks() {
                   </Typography>
                 ) : (
                   tasks?.map((task) => (
-                    <Grid item xs={12} sm={6} key={task._id}>
-                      <TaskCard
-                        id={task._id}
-                        title={task.title}
-                        description={task.description}
-                        status={task.status}
-                        duo={task.duo}
-                        onStatusChange={(newStatus) =>
-                          handleStatusChange(task._id, newStatus)
-                        }
-                        onDelete={() => handleDelete(task._id)}
-                        onUpdate={(updatedTask) =>
-                          handleUpdate(task._id, updatedTask)
-                        }
-                      />
-                    </Grid>
+                    <TaskCard
+                      id={task._id}
+                      title={task.title}
+                      description={task.description}
+                      status={task.status}
+                      duo={task.duo}
+                      onStatusChange={(newStatus) =>
+                        handleStatusChange(task._id, newStatus)
+                      }
+                      onDelete={() => handleDelete(task._id)}
+                      onUpdate={(updatedTask) =>
+                        handleUpdate(task._id, updatedTask)
+                      }
+                      key={task._id}
+                    />
                   ))
                 )}
-              </Grid>
+              </Grid2>
             </TabPanel>
-            <TabPanel value="2">
-              <Grid container spacing={2}>
+            <TabPanel value="2" sx={{ paddingX: 0, width: "100%" }}>
+              <Grid2
+                container
+                spacing={4}
+                display={"flex"}
+                flexDirection={"row"}
+                flexWrap={"wrap"}
+              >
                 {tasks?.filter((task) => task.status === "pending").length ===
                 0 ? (
                   <Typography
@@ -256,28 +226,33 @@ export default function ViewTasks() {
                   tasks
                     ?.filter((task) => task.status === "pending")
                     .map((task) => (
-                      <Grid item xs={12} sm={6} key={task._id}>
-                        <TaskCard
-                          id={task._id}
-                          title={task.title}
-                          description={task.description}
-                          status={task.status}
-                          duo={task.duo}
-                          onStatusChange={(newStatus) =>
-                            handleStatusChange(task._id, newStatus)
-                          }
-                          onDelete={() => handleDelete(task._id)}
-                          onUpdate={(updatedTask) =>
-                            handleUpdate(task._id, updatedTask)
-                          }
-                        />
-                      </Grid>
+                      <TaskCard
+                        id={task._id}
+                        title={task.title}
+                        description={task.description}
+                        status={task.status}
+                        duo={task.duo}
+                        key={task._id}
+                        onStatusChange={(newStatus) =>
+                          handleStatusChange(task._id, newStatus)
+                        }
+                        onDelete={() => handleDelete(task._id)}
+                        onUpdate={(updatedTask) =>
+                          handleUpdate(task._id, updatedTask)
+                        }
+                      />
                     ))
                 )}
-              </Grid>
+              </Grid2>
             </TabPanel>
-            <TabPanel value="3">
-              <Grid container spacing={2}>
+            <TabPanel value="3" sx={{ paddingX: 0, width: "100%" }}>
+              <Grid2
+                container
+                display={"flex"}
+                flexDirection={"row"}
+                spacing={4}
+                flexWrap={"wrap"}
+              >
                 {tasks?.filter((task) => task.status === "in progress")
                   .length === 0 ? (
                   <Typography
@@ -293,28 +268,33 @@ export default function ViewTasks() {
                   tasks
                     ?.filter((task) => task.status === "in progress")
                     .map((task) => (
-                      <Grid item xs={12} sm={6} key={task._id}>
-                        <TaskCard
-                          id={task._id}
-                          title={task.title}
-                          description={task.description}
-                          status={task.status}
-                          duo={task.duo}
-                          onStatusChange={(newStatus) =>
-                            handleStatusChange(task._id, newStatus)
-                          }
-                          onDelete={() => handleDelete(task._id)}
-                          onUpdate={(updatedTask) =>
-                            handleUpdate(task._id, updatedTask)
-                          }
-                        />
-                      </Grid>
+                      <TaskCard
+                        id={task._id}
+                        title={task.title}
+                        description={task.description}
+                        status={task.status}
+                        duo={task.duo}
+                        key={task._id}
+                        onStatusChange={(newStatus) =>
+                          handleStatusChange(task._id, newStatus)
+                        }
+                        onDelete={() => handleDelete(task._id)}
+                        onUpdate={(updatedTask) =>
+                          handleUpdate(task._id, updatedTask)
+                        }
+                      />
                     ))
                 )}
-              </Grid>
+              </Grid2>
             </TabPanel>
-            <TabPanel value="4">
-              <Grid container spacing={2}>
+            <TabPanel value="4" sx={{ paddingX: 0, width: "100%" }}>
+              <Grid2
+                container
+                display={"flex"}
+                flexDirection={"row"}
+                spacing={4}
+                flexWrap={"wrap"}
+              >
                 {tasks?.filter((task) => task.status === "completed").length ===
                 0 ? (
                   <Typography
@@ -330,25 +310,24 @@ export default function ViewTasks() {
                   tasks
                     ?.filter((task) => task.status === "completed")
                     .map((task) => (
-                      <Grid item xs={12} sm={6} key={task._id}>
-                        <TaskCard
-                          id={task._id}
-                          title={task.title}
-                          description={task.description}
-                          status={task.status}
-                          duo={task.duo}
-                          onStatusChange={(newStatus) =>
-                            handleStatusChange(task._id, newStatus)
-                          }
-                          onDelete={() => handleDelete(task._id)}
-                          onUpdate={(updatedTask) =>
-                            handleUpdate(task._id, updatedTask)
-                          }
-                        />
-                      </Grid>
+                      <TaskCard
+                        id={task._id}
+                        title={task.title}
+                        description={task.description}
+                        status={task.status}
+                        duo={task.duo}
+                        key={task._id}
+                        onStatusChange={(newStatus) =>
+                          handleStatusChange(task._id, newStatus)
+                        }
+                        onDelete={() => handleDelete(task._id)}
+                        onUpdate={(updatedTask) =>
+                          handleUpdate(task._id, updatedTask)
+                        }
+                      />
                     ))
                 )}
-              </Grid>
+              </Grid2>
             </TabPanel>
           </TabContext>
         </Box>
